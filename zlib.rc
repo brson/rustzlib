@@ -1,3 +1,4 @@
 #[link(name = "zlib",
        vers = "0.1",
        uuid = "6c34ea67-f290-4438-9d82-db480114d7da")];
+#[crate_type = "lib"];
