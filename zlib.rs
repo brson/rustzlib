@@ -3,7 +3,7 @@ use std;
 import core::ptr;
 import core::vec;
 
-import ctypes::c_int;
+import libc::c_int;
 
 export compress, uncompress;
 
@@ -21,7 +21,7 @@ fn compress(src: [u8], level: int) -> [u8] unsafe {
     assert(level <= 9);
     let srclen = vec::len(src) as u64;
     let destlen = _native::compressBound(srclen);
-    let dest: [mutable u8] = vec::init_elt_mut::<u8>(0u8, destlen as uint);
+    let dest: [mut u8] = vec::to_mut(vec::from_elem::<u8>(destlen as uint, 0u8));
     let pdest = vec::unsafe::to_ptr::<u8>(dest);
     let psrc = vec::unsafe::to_ptr::<u8>(src);
     let pdestlen = ptr::addr_of::<u64>(destlen);
@@ -37,7 +37,7 @@ fn uncompress(src: [u8], _destlen: u64) -> [u8] unsafe {
     let srclen = vec::len(src) as u64;
     let destlen = _destlen;
     let pdestlen = ptr::addr_of::<u64>(destlen);
-    let dest: [mutable u8] = vec::init_elt_mut::<u8>(0u8, destlen as uint);
+    let dest: [mut u8] = vec::to_mut(vec::from_elem::<u8>(destlen as uint, 0u8));
     let pdest = vec::unsafe::to_ptr::<u8>(dest);
     let psrc = vec::unsafe::to_ptr::<u8>(src);
     let r = _native::uncompress(pdest, pdestlen, psrc, srclen);
